@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CheckLog: controle interno integrado de ponto, estoque, fornecedores e compras.">
+    <title>CheckLog | Sistema Integrado</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap"></noscript>
+    <link rel="stylesheet" href="./css/style.css?v=1.7.0">
+
+    <!-- Define o tema antes da primeira pintura da tela. -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+
+</head>
+
+<body class="auth-loading">
+
+<a class="skip-link" href="#app-content">Ir para o conteúdo principal</a>
+
+<div class="auth-loading-screen" role="status" aria-live="polite">
+    <div class="auth-loading-card">
+        <img src="img/logo-CheckLog-removebg-preview.png" alt="CheckLog" width="435" height="162">
+        <span class="auth-loading-kicker">Ambiente protegido</span>
+        <strong>Validando sessão</strong>
+        <p>Conectando ao ambiente seguro do CheckLog. Se a espera continuar, verifique a conexão e tente novamente.</p>
+        <div class="auth-loading-actions">
+            <a href="./">Tentar novamente</a>
+        </div>
+    </div>
+</div>
+
+<!-- Header principal do CheckLog. -->
+
+<header id="global-nav" class="app-header" style="display:none;" aria-label="Cabeçalho principal">
+    <div class="header-brand">
+        <button id="header-menu-toggle" class="header-menu-toggle" type="button" aria-label="Abrir menu de módulos" aria-controls="header-menu" aria-expanded="false">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div class="header-logo" aria-label="CheckLog">
+            <img src="img/logo-CheckLog-removebg-preview.png" alt="CheckLog" width="435" height="162">
+        </div>
+        <div class="header-context" aria-hidden="true">
+            <span class="header-context-dot"></span>
+            <span>Operação conectada</span>
+        </div>
+    </div>
+
+    <nav id="header-menu" class="header-menu" aria-label="Módulos do sistema">
+        <span class="header-section-label">Operação</span>
+        <a href="javascript:void(0)" data-page="pagina-inicial" onclick="navigate('pagina-inicial')" aria-label="Página Inicial" title="Página Inicial">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H4.5A1.5 1.5 0 0 1 3 19.5z"></path></svg>
+            <span>Página Inicial</span>
+        </a>
+        <a href="javascript:void(0)" data-page="registrar_ponto" onclick="navigate('registrar_ponto')" aria-label="Máquina de Ponto" title="Máquina de Ponto">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M12 6v6l4 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg>
+            <span>Máquina de Ponto</span>
+        </a>
+        <a href="javascript:void(0)" data-page="meu-checklog" onclick="navigate('meu-checklog')" aria-label="Meu CheckLog" title="Meu CheckLog">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 9a7 7 0 0 0-14 0M16 15l2 2 4-4"></path></svg>
+            <span>Meu CheckLog</span>
+        </a>
+        <span class="header-section-label" data-admin-only="true">Gestão</span>
+        <a href="javascript:void(0)" data-page="gerenciamento-ponto" data-admin-only="true" onclick="navigate('gerenciamento-ponto')" aria-label="Painel de Gestão" title="Painel de Gestão">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M4 19V5m5 14V9m5 10V3m5 16v-7"></path></svg>
+            <span>Painel de Gestão</span>
+        </a>
+        <a href="javascript:void(0)" data-page="justificativas" data-admin-only="true" onclick="navigate('justificativas')" aria-label="Justificativas" title="Justificativas">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v4H7zM5 5H3v16h18V5h-2M8 12h8M8 16h5"></path></svg>
+            <span>Justificativas</span>
+        </a>
+        <a href="javascript:void(0)" data-page="cadastro" data-admin-only="true" onclick="navigate('cadastro')" aria-label="Cadastrar Funcionário" title="Cadastrar Funcionário">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM19 8v6m3-3h-6"></path></svg>
+            <span>Cadastrar Funcionário</span>
+        </a>
+        <a href="javascript:void(0)" data-page="controle-estoque" data-admin-only="true" onclick="navigate('controle-estoque')" aria-label="Controle de Estoque" title="Controle de Estoque">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="m3 7 9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7M12 11v10"></path></svg>
+            <span>Controle de Estoque</span>
+        </a>
+        <a href="javascript:void(0)" data-page="fornecedores" data-admin-only="true" onclick="navigate('fornecedores')" aria-label="Fornecedores" title="Fornecedores">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 12h6M9 16h6"></path></svg>
+            <span>Fornecedores</span>
+        </a>
+    </nav>
+
+    <div class="header-actions">
+        <div id="user-profile" class="user-profile header-user" style="display:none;">
+            <div class="user-avatar">
+                <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;" aria-hidden="true" focusable="false">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="user-info">
+                <span id="user-email">...</span>
+                <span id="user-role" class="user-role">...</span>
+            </div>
+            <button id="btnSair" class="btn-sair" type="button" aria-label="Encerrar sessão">Sair</button>
+        </div>
+        <div id="login-area" class="header-login">
+            <a href="javascript:void(0)" onclick="navigate('login')" class="btn-entrar">Login Administrativo</a>
+        </div>
+        <button id="settings-toggle" class="settings-toggle" type="button" aria-label="Abrir configurações de tema" aria-haspopup="dialog" aria-controls="theme-overlay" aria-expanded="false">
+            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Zm7.4-2.1a7.8 7.8 0 0 0 .1-1.4 7.8 7.8 0 0 0-.1-1.4l2-1.5-2-3.5-2.4 1a8.2 8.2 0 0 0-2.4-1.4L14.3 2h-4.1l-.4 3.2a8.2 8.2 0 0 0-2.4 1.4l-2.4-1-2 3.5 2 1.5a7.8 7.8 0 0 0-.1 1.4c0 .5 0 1 .1 1.4l-2 1.5 2 3.5 2.4-1a8.2 8.2 0 0 0 2.4 1.4l.4 3.2h4.1l.4-3.2a8.2 8.2 0 0 0 2.4-1.4l2.4 1 2-3.5-2-1.5Z"></path></svg>
+            <span>Aparência</span>
+        </button>
+    </div>
+</header>
+
+<button id="header-scrim" class="header-scrim" type="button" aria-label="Fechar menu de módulos" hidden></button>
+
+<div id="theme-overlay" class="theme-overlay" hidden>
+    <div class="theme-dialog" role="dialog" aria-modal="true" aria-labelledby="theme-dialog-title">
+        <div class="theme-dialog-header">
+            <div>
+                <span class="eyebrow">Preferências</span>
+                <h2 id="theme-dialog-title">Aparência do sistema</h2>
+            </div>
+            <button id="theme-close" class="theme-close" type="button" aria-label="Fechar configurações">×</button>
+        </div>
+        <div class="theme-options" role="group" aria-label="Escolha de tema">
+            <button type="button" class="theme-choice" data-theme-option="light">
+                <span class="theme-swatch swatch-light"></span>
+                <strong>Tema claro</strong>
+                <small>Interface clara para ambientes iluminados.</small>
+            </button>
+            <button type="button" class="theme-choice" data-theme-option="dark">
+                <span class="theme-swatch swatch-dark"></span>
+                <strong>Tema escuro</strong>
+                <small>Contraste confortável para baixa luminosidade.</small>
+            </button>
+            <button type="button" class="theme-choice" data-theme-option="system">
+                <span class="theme-swatch swatch-system"></span>
+                <strong>Sincronizado</strong>
+                <small>Acompanha a preferência do dispositivo.</small>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Conteúdo das páginas da SPA. -->
+<main id="app-content" tabindex="-1">
+
+    <div id="page-module-loader" class="page-module-loader" role="status" aria-live="polite">Carregando módulos do CheckLog…</div>
+    <div id="page-module-host" data-page-modules="login cadastro pagina-inicial registrar_ponto meu-checklog gerenciamento-ponto justificativas controle-estoque fornecedores dashboard encomendar relatorios"></div>
+    <div id="ponto-edit-modal" class="modal-backdrop utility-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ponto-edit-title">
+        <h3 id="ponto-edit-title">Editar Registro de Ponto</h3>
+        <div class="field">
+            <label for="edit-ponto-momento">Movimento</label>
+            <select id="edit-ponto-momento">
+                <option value="Entrada">Entrada</option>
+                <option value="Saída para Almoço">Saída para Almoço</option>
+                <option value="Volta do Almoço">Volta do Almoço</option>
+                <option value="Saída">Saída</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="edit-ponto-timestamp">Data e hora</label>
+            <input id="edit-ponto-timestamp" type="datetime-local">
+        </div>
+        <div class="modal-actions-row">
+            <button type="button" id="cancel-edit-ponto" class="secondary-action">Cancelar</button>
+            <button type="button" id="save-edit-ponto" class="btn">Salvar Ajuste</button>
+        </div>
+    </div>
+</div>
+
+<div id="criticos-modal" class="modal-backdrop utility-modal" hidden>
+    <div class="modal critical-modal" role="dialog" aria-modal="true" aria-labelledby="criticos-title">
+        <h3 id="criticos-title">Itens críticos</h3>
+        <div id="criticos-lista" class="critical-list"></div>
+        <button type="button" id="close-criticos" class="btn" style="width:100%;margin-top:12px;">Fechar</button>
+    </div>
+</div>
+
+<div id="decision-modal" class="modal-backdrop utility-modal" hidden>
+    <form class="modal decision-modal" id="decision-form" role="dialog" aria-modal="true" aria-labelledby="decision-title">
+        <div class="modal-title-row">
+            <div><span class="section-kicker">Registrar decisão</span><h3 id="decision-title">Confirmar ação</h3></div>
+            <button type="button" id="decision-close" class="theme-close" aria-label="Fechar">×</button>
+        </div>
+        <p id="decision-description" class="muted-note"></p>
+        <div class="field"><label for="decision-comment">Observação</label><textarea id="decision-comment" rows="4"></textarea></div>
+        <p id="decision-error" class="form-message" role="alert"></p>
+        <div class="modal-actions-row"><button type="button" id="decision-cancel" class="secondary-action">Cancelar</button><button type="submit" id="decision-confirm" class="btn">Confirmar</button></div>
+    </form>
+</div>
+
+<aside id="detail-drawer" class="detail-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="detail-drawer-title">
+    <div class="detail-drawer-header"><div><span class="section-kicker">Detalhes</span><h2 id="detail-drawer-title">Registro</h2></div><button type="button" id="detail-drawer-close" class="theme-close" aria-label="Fechar detalhes">×</button></div>
+    <div id="detail-drawer-content" class="detail-drawer-content"></div>
+</aside>
+<div id="detail-drawer-scrim" class="detail-drawer-scrim" hidden></div>
+
+<div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+</main><!-- Fim do conteúdo principal. -->
+
+<!-- Chatbot contextual compartilhado. -->
+<div class="chatbot-wrapper">
+    <button type="button" id="chatbot-toggle" title="Precisa de ajuda?" aria-label="Abrir assistente" aria-controls="chatbotContainer" aria-expanded="false">
+        <svg class="ui-icon" viewbox="0 0 24 24" aria-hidden="true">
+            <path d="M5.5 18.2A8.2 8.2 0 0 1 4 13.5C4 8.8 7.8 5 12.5 5S21 8.8 21 13.5 17.2 22 12.5 22a8.2 8.2 0 0 1-4.4-1.3L4 22l1.5-3.8Z"></path>
+            <path d="M8.5 12h8M8.5 15h5"></path>
+        </svg>
+    </button>
+    <div class="chatbot-container hidden" id="chatbotContainer" role="dialog" aria-label="Assistente CheckLog" aria-hidden="true" inert>
+        <div class="chatbot-header">
+            <div>
+                <h4>Assistente CheckLog</h4>
+                <span class="status-online">Online</span>
+            </div>
+            <button type="button" id="chatbot-close" aria-label="Fechar chat">
+                <svg class="ui-icon" viewbox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6 6 18"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages" aria-live="polite">
+            <div class="chat-msg bot-msg">
+                Olá! Seja bem-vindo ao <b>CheckLog</b>.
+                Selecione uma opção abaixo para que eu possa ajudar:
+            </div>
+        </div>
+        <div class="chatbot-options" id="chatbotOptions"></div>
+    </div>
+</div>
+
+<!-- Rodapé global. -->
+<footer id="global-footer" class="footer" style="display:none;">
+    © CheckLog 2026. Todos os direitos reservados.
+</footer>
+
+<!-- VLibras isolado da lógica principal. -->
+<style>
+    .checklog-vlibras {
+        top: auto !important;
+        right: 18px !important;
+        bottom: 100px !important;
+        left: auto !important;
+        transform: none !important;
+    }
+
+    .checklog-vlibras [vw-access-button] {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: auto !important;
+        left: auto !important;
+    }
+
+    .checklog-vlibras [vw-plugin-wrapper] {
+        width: min(300px, calc(100vw - 36px)) !important;
+        height: min(450px, calc(100vh - 32px)) !important;
+        height: min(450px, calc(100dvh - 32px)) !important;
+        max-height: calc(100vh - 32px) !important;
+        max-height: calc(100dvh - 32px) !important;
+        overflow: hidden !important;
+        border-radius: 14px !important;
+        z-index: 10020 !important;
+    }
+
+    @media (max-width: 720px) {
+        .checklog-vlibras {
+            right: 12px !important;
+            bottom: 88px !important;
+        }
+
+        .checklog-vlibras [vw-plugin-wrapper] {
+            width: min(300px, calc(100vw - 24px)) !important;
+            height: min(450px, calc(100vh - 32px)) !important;
+            height: min(450px, calc(100dvh - 32px)) !important;
+            max-height: calc(100vh - 32px) !important;
+            max-height: calc(100dvh - 32px) !important;
+        }
+    }
+</style>
+<div vw class="enabled checklog-vlibras">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+    </div>
+</div>
+<script id="checklog-vlibras-script" src="https://vlibras.gov.br/app/vlibras-plugin.js" async onload="if (window.VLibras?.Widget) new window.VLibras.Widget('https://vlibras.gov.br/app')">
+</script>
+
+<!-- App unificado — type="module" é auto-deferred (roda após o DOM) -->
+<script src="js/email-service.js?v=1.0.1"></script>
+<script type="module" src="js/app.js?v=1.7.0"></script>
+
+</body>
+</html>

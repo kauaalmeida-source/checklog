@@ -1,0 +1,2 @@
+movimento_id,data_hora,produto_id,produto,categoria,tipo,quantidade,saldo_anterior,saldo_atual,destinatario_id,destinatario_nome,destinatario_matricula,operador_id,operador_nome,operador_matricula,observacao
+MOV-001,2026-07-04T12:00:00.000Z,PROD-001,Luva nitrilica,EPI,Retirada,2,6,4,PESSOA-001,,,PESSOA-002,,,Uso interno

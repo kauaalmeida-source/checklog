@@ -1,0 +1,3 @@
+data,funcionario_id,funcionario_nome,matricula,setor,turno,minutos_trabalhados,minutos_esperados,saldo_minutos,jornada_encerrada,quantidade_registros
+2026-07-01,COLAB-001,,,Operacao,Administrativo,540,540,0,true,4
+2026-07-02,COLAB-001,,,Operacao,Administrativo,555,540,15,true,4

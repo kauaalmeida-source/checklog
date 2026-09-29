@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Dashboard de Estoque do sistema CheckLog.">
+    <base href="../">
+    <title>Dashboard de Estoque | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="dashboard">
+    <main id="app-content" tabindex="-1">
+        <div id="page-dashboard" class="page active">
+                <section class="work-page-header inventory-header">
+                    <span class="section-kicker">Inventário operacional</span>
+                    <h1>Dashboard de Estoque</h1>
+                    <p>Indicadores consolidados para acompanhar volume, categorias e pontos de atenção.</p>
+                    <div class="inventory-tabs">
+                        <a href="javascript:void(0)" data-page="controle-estoque" onclick="navigate('controle-estoque')">Produtos</a>
+                        <a href="javascript:void(0)" data-page="dashboard" onclick="navigate('dashboard')" class="active">Dashboard</a>
+                        <a href="javascript:void(0)" data-page="relatorios" onclick="navigate('relatorios')">Relatórios</a>
+                        <a href="javascript:void(0)" data-page="encomendar" onclick="navigate('encomendar')">Encomendar</a>
+                    </div>
+                </section>
+                <div class="app">
+                    <section class="dashboard">
+                        <section class="cards">
+                            <div class="card"><h2>Total de Produtos</h2><p class="value" id="dash-total-produtos">0</p></div>
+                            <div class="card"><h2>Categorias</h2><p class="value" id="dash-categorias">0</p></div>
+                            <div class="card warning"><h2>Estoque Baixo</h2><p class="value" id="dash-estoque-baixo">0</p></div>
+                            <div class="card"><h2>Faturamento Estimado</h2><p class="value" id="dash-revenue">R$ 0,00</p></div>
+                            <div class="card"><h2>Margem Estimada</h2><p class="value" id="dash-margin">R$ 0,00</p></div>
+                        </section>
+                        <section class="table-section">
+                            <h3>Resumo Detalhado</h3>
+                            <table>
+                                <caption class="sr-only">Resumo dos indicadores de estoque</caption>
+                                <tr><th scope="col">Métrica</th><th scope="col">Valor</th></tr>
+                                <tr><td>Total de Produtos</td><td id="dash-total-produtos-row">0 itens</td></tr>
+                                <tr><td>Categorias</td><td id="dash-categorias-row">0</td></tr>
+                                <tr><td>Itens com Estoque Baixo</td><td id="dash-estoque-baixo-row">0</td></tr>
+                                <tr><td>Quantidade Total</td><td id="dash-quantidade-row">0 unidades</td></tr>
+                                <tr><td>Valor em Estoque</td><td id="dash-valor-row">R$ 0,00</td></tr>
+                                <tr><td>Faturamento Estimado</td><td id="dash-revenue-row">R$ 0,00</td></tr>
+                                <tr><td>Margem Estimada</td><td id="dash-margin-row">R$ 0,00</td></tr>
+                            </table>
+                        </section>
+                    </section>
+                </div>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

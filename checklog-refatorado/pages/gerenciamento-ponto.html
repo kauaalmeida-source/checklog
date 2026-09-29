@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Painel de Gestão do sistema CheckLog.">
+    <base href="../">
+    <title>Painel de Gestão | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="gerenciamento-ponto">
+    <main id="app-content" tabindex="-1">
+        <div id="page-gerenciamento-ponto" class="page active">
+                <section class="work-page-header management-header">
+                    <span class="section-kicker">Gestão de jornada</span>
+                    <h1>Painel de Gestão</h1>
+                    <p>Acompanhe presença, atrasos, pendências e registros do dia em uma visão operacional.</p>
+                </section>
+        
+                <div class="dashboard-container management-metrics">
+                    <div class="card card-servico metric-card">
+                        <h3>Em Serviço</h3>
+                        <div class="card-info">
+                            <span id="qtd-servico" class="numero-destaque">0</span>
+                            <small id="qtd-servico-label">Ativos agora</small>
+                        </div>
+                    </div>
+                    <div class="card card-atraso metric-card">
+                        <h3>Atrasos</h3>
+                        <div class="card-info">
+                            <span id="qtd-atraso" class="numero-destaque">0</span>
+                            <small id="qtd-atraso-label">Hoje</small>
+                        </div>
+                    </div>
+                    <div class="card card-banco metric-card">
+                        <h3>Horas Totais</h3>
+                        <div class="card-info">
+                            <span id="qtd-horas" class="numero-destaque">0h</span>
+                            <small id="qtd-horas-label">Do dia</small>
+                        </div>
+                    </div>
+                    <div class="card card-pendencia metric-card">
+                        <h3>Pendências</h3>
+                        <div class="card-info">
+                            <span id="qtd-pendencia" class="numero-destaque">0</span>
+                            <small id="qtd-pendencia-label">Sem saída</small>
+                        </div>
+                    </div>
+                    <div class="card card-banco metric-card">
+                        <h3>Banco de Horas</h3>
+                        <div class="card-info">
+                            <span id="qtd-banco-horas" class="numero-destaque">0h</span>
+                            <small id="qtd-banco-label">Saldo do dia</small>
+                        </div>
+                    </div>
+                </div>
+        
+                <section class="management-grid">
+                    <section class="ponto-detalhado data-panel">
+                        <div class="panel-heading-row">
+                            <div>
+                                <span class="section-kicker">Espelho diário</span>
+                                <h2>Registros do dia</h2>
+                            </div>
+                            <div class="panel-actions">
+                                <select id="ponto-periodo" class="period-filter" aria-label="Período dos registros de ponto">
+                                    <option value="hoje">Hoje</option>
+                                    <option value="mes-atual">Mês atual</option>
+                                    <option value="mes-anterior">Mês anterior</option>
+                                    <option value="personalizado">Período personalizado</option>
+                                </select>
+                                <input id="ponto-data-inicio" class="period-date" type="date" hidden aria-label="Data inicial">
+                                <input id="ponto-data-fim" class="period-date" type="date" hidden aria-label="Data final">
+                                <button type="button" id="btn-exportar-ponto-csv" class="secondary-action">Exportar CSV</button>
+                                <button type="button" id="btn-imprimir-ponto" class="secondary-action">Imprimir Espelho</button>
+                                <button type="button" onclick="limparTudo()" class="danger-action">Excluir período</button>
+                            </div>
+                        </div>
+                        <div class="operations-toolbar management-toolbar">
+                            <input id="management-search" type="search" aria-label="Buscar registros de funcionários" placeholder="Buscar funcionário, matrícula, cargo ou setor">
+                            <select id="management-status-filter" aria-label="Filtrar registros por situação">
+                                <option value="">Todas as situações</option>
+                                <option value="active">Em serviço</option>
+                                <option value="late">Com atraso</option>
+                                <option value="pending">Sem saída</option>
+                                <option value="closed">Jornada encerrada</option>
+                            </select>
+                            <select id="management-sector-filter" aria-label="Filtrar registros por setor"><option value="">Todos os setores</option></select>
+                            <button type="button" class="secondary-action clear-toolbar" data-clear-toolbar="management">Limpar</button>
+                            <span id="management-result-count" class="result-count" role="status" aria-live="polite">0 registros</span>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <caption class="sr-only">Registros de ponto do período selecionado</caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcionário</th>
+                                        <th scope="col">Status / Turno</th>
+                                        <th scope="col">Último Registro</th>
+                                        <th scope="col">Tempo</th>
+                                        <th scope="col">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabela-corpo">
+                                    <tr>
+                                        <td colspan="5" class="table-loading-cell">Carregando registros...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+        
+                    <aside class="management-rail">
+                        <section class="ops-card employee-status-panel">
+                            <div class="panel-heading-row">
+                                <div>
+                                    <span class="section-kicker">Equipe</span>
+                                    <h2>Status dos funcionários</h2>
+                                </div>
+                            </div>
+                            <div id="funcionarios-status-cards" class="employee-status-cards">
+                                <p class="muted-note">Carregando funcionários...</p>
+                            </div>
+                        </section>
+        
+                        <section class="ops-card management-aside">
+                            <h2>Checklist de fechamento</h2>
+                            <ul class="check-list">
+                                <li>Conferir colaboradores sem saída.</li>
+                                <li>Validar atrasos antes do fechamento diário.</li>
+                                <li>Revisar exclusões com responsável direto.</li>
+                                <li>Exportar ou registrar observações do turno.</li>
+                            </ul>
+                        </section>
+                    </aside>
+                </section>
+                <section class="data-panel point-audit-panel">
+                    <div class="panel-heading-row">
+                        <div><span class="section-kicker">Auditoria</span><h2>Ajustes administrativos recentes</h2></div>
+                        <button type="button" id="btn-exportar-historico-ponto" class="secondary-action">Exportar auditoria</button>
+                    </div>
+                    <div class="table-wrapper point-audit-table">
+                        <table>
+                            <caption class="sr-only">Histórico de ajustes administrativos de ponto</caption>
+                            <thead><tr><th scope="col">Ação</th><th scope="col">Funcionário</th><th scope="col">Registro</th><th scope="col">Responsável</th><th scope="col">Data / Hora</th></tr></thead>
+                            <tbody id="ponto-audit-body"><tr><td colspan="5" style="text-align:center;padding:20px;">Carregando auditoria...</td></tr></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

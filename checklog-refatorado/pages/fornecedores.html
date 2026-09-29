@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Fornecedores do sistema CheckLog.">
+    <base href="../">
+    <title>Fornecedores | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="fornecedores">
+    <main id="app-content" tabindex="-1">
+        <div id="page-fornecedores" class="page active">
+                <section class="work-page-header inventory-header">
+                    <span class="section-kicker">Rede de suprimentos</span>
+                    <h1>Fornecedores</h1>
+                    <p>Centralize contatos, categorias atendidas, prazo médio e histórico de compras dos parceiros.</p>
+                </section>
+        
+                <section class="supplier-metrics">
+                    <article class="supplier-metric"><span>Total cadastrado</span><strong id="supplier-total">0</strong><small>Empresas na base</small></article>
+                    <article class="supplier-metric success"><span>Ativos</span><strong id="supplier-active">0</strong><small>Aptos para compra</small></article>
+                    <article class="supplier-metric"><span>Prazo médio</span><strong id="supplier-lead-time">0d</strong><small>Entrega estimada</small></article>
+                    <article class="supplier-metric warning"><span>Compras em aberto</span><strong id="supplier-open-orders">0</strong><small>Pedidos não recebidos</small></article>
+                </section>
+        
+                <section class="supplier-panel">
+                    <div class="panel-heading-row">
+                        <div>
+                            <span class="section-kicker">Base de parceiros</span>
+                            <h2>Fornecedores cadastrados</h2>
+                            <p class="muted-note">Use os filtros para encontrar rapidamente o parceiro certo para cada compra.</p>
+                        </div>
+                        <button type="button" id="btn-add-supplier" class="btn">Cadastrar fornecedor</button>
+                    </div>
+                    <div class="supplier-controls">
+                        <input id="supplier-search" type="search" aria-label="Pesquisar fornecedores" placeholder="Buscar empresa, categoria ou contato">
+                        <select id="supplier-status-filter" aria-label="Filtrar fornecedores por status">
+                            <option value="">Todos os status</option>
+                            <option value="Ativo">Ativos</option>
+                            <option value="Em avaliação">Em avaliação</option>
+                            <option value="Inativo">Inativos</option>
+                        </select>
+                        <select id="supplier-category-filter" aria-label="Filtrar fornecedores por categoria">
+                            <option value="">Todas as categorias</option>
+                        </select>
+                        <select id="supplier-sort" aria-label="Ordenar fornecedores">
+                            <option value="name">Nome A-Z</option>
+                            <option value="rating">Melhor avaliação</option>
+                            <option value="lead">Menor prazo</option>
+                            <option value="orders">Mais pedidos</option>
+                        </select>
+                        <button type="button" class="secondary-action clear-toolbar" data-clear-toolbar="suppliers">Limpar</button>
+                        <div class="view-switch" data-view-switch="fornecedores" aria-label="Visualização dos fornecedores">
+                            <button type="button" data-view-module="fornecedores" data-view="cards" aria-label="Visualizar em cards" title="Visualizar em cards"><svg viewbox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></button>
+                            <button type="button" data-view-module="fornecedores" data-view="list" aria-label="Visualizar em lista" title="Visualizar em lista"><svg viewbox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"></path></svg></button>
+                        </div>
+                        <span id="supplier-result-count" class="result-count" role="status" aria-live="polite">0 fornecedores</span>
+                    </div>
+                    <div id="supplier-list" class="supplier-grid">
+                        <div class="empty-state"><strong>Carregando fornecedores...</strong><span>A base será exibida aqui.</span></div>
+                    </div>
+                </section>
+        
+                <div id="supplier-modal" class="modal-backdrop utility-modal" hidden>
+                    <form id="supplier-form" class="modal supplier-modal" role="dialog" aria-modal="true" aria-labelledby="supplier-modal-title">
+                        <div class="modal-title-row">
+                            <div><span class="section-kicker">Rede de suprimentos</span><h3 id="supplier-modal-title">Cadastrar fornecedor</h3></div>
+                            <button type="button" id="supplier-modal-close" class="theme-close" aria-label="Fechar">×</button>
+                        </div>
+                        <div class="supplier-form-grid">
+                            <div class="field field-span-2"><label for="supplier-name">Empresa *</label><input id="supplier-name" required placeholder="Razão social ou nome fantasia"></div>
+                            <div class="field"><label for="supplier-cnpj">CNPJ</label><input id="supplier-cnpj" placeholder="00.000.000/0000-00"></div>
+                            <div class="field"><label for="supplier-category">Categoria principal *</label><input id="supplier-category" required placeholder="Ex: EPIs, Informática"></div>
+                            <div class="field"><label for="supplier-contact">Contato</label><input id="supplier-contact" placeholder="Nome do responsável"></div>
+                            <div class="field"><label for="supplier-phone">Telefone</label><input id="supplier-phone" type="tel" placeholder="(00) 00000-0000"></div>
+                            <div class="field"><label for="supplier-email">E-mail</label><input id="supplier-email" type="email" placeholder="compras@empresa.com"></div>
+                            <div class="field"><label for="supplier-lead">Prazo médio (dias)</label><input id="supplier-lead" type="number" min="0" value="0"></div>
+                            <div class="field"><label for="supplier-rating">Avaliação</label><select id="supplier-rating"><option value="5">5 - Excelente</option><option value="4">4 - Bom</option><option value="3">3 - Regular</option><option value="2">2 - Abaixo do esperado</option><option value="1">1 - Ruim</option></select></div>
+                            <div class="field"><label for="supplier-status">Status</label><select id="supplier-status"><option>Ativo</option><option>Em avaliação</option><option>Inativo</option></select></div>
+                            <div class="field field-span-2"><label for="supplier-notes">Observações</label><textarea id="supplier-notes" rows="3" placeholder="Condições comerciais, especialidades ou restrições"></textarea></div>
+                        </div>
+                        <div class="modal-actions-row">
+                            <button type="button" id="supplier-modal-cancel" class="secondary-action">Cancelar</button>
+                            <button type="submit" class="btn">Salvar fornecedor</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

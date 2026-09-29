@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Encomendar Produto do sistema CheckLog.">
+    <base href="../">
+    <title>Encomendar Produto | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="encomendar">
+    <main id="app-content" tabindex="-1">
+        <div id="page-encomendar" class="page active">
+                <section class="work-page-header inventory-header">
+                    <span class="section-kicker">Inventário operacional</span>
+                    <h1>Encomendar Produto</h1>
+                    <p>Registre solicitações de compra ou reposição sem sair do módulo de estoque.</p>
+                    <div class="inventory-tabs">
+                        <a href="javascript:void(0)" data-page="controle-estoque" onclick="navigate('controle-estoque')">Produtos</a>
+                        <a href="javascript:void(0)" data-page="dashboard" onclick="navigate('dashboard')">Dashboard</a>
+                        <a href="javascript:void(0)" data-page="relatorios" onclick="navigate('relatorios')">Relatórios</a>
+                        <a href="javascript:void(0)" data-page="encomendar" onclick="navigate('encomendar')" class="active">Encomendar</a>
+                    </div>
+                </section>
+                <section class="purchase-layout">
+                    <div class="purchase-form-panel">
+                        <div class="form-section-title">
+                            <div><span class="section-kicker">Nova solicitação</span><h2>Solicitação de compra</h2></div>
+                            <span>Compras a partir de R$ 1.000 exigem aprovação.</span>
+                        </div>
+                        <form id="form-encomenda" class="purchase-form">
+                            <div class="field"><label for="enc-responsavel">Responsável *</label><input type="text" id="enc-responsavel" placeholder="Seu nome completo" required></div>
+                            <div class="field"><label for="enc-categoria">Categoria *</label><input type="text" id="enc-categoria" placeholder="Ex: Eletrônicos, EPIs" required></div>
+                            <div class="field field-span-2"><label for="enc-produto-estoque">Produto do estoque *</label><select id="enc-produto-estoque" required><option value="">Selecione um produto cadastrado</option></select><small class="field-hint">Para comprar um item novo, cadastre-o primeiro com saldo zero.</small></div>
+                            <div class="field field-span-2"><label for="enc-produto">Produto desejado *</label><input type="text" id="enc-produto" placeholder="Descreva o produto desejado" required></div>
+                            <div class="field"><label for="enc-quantidade">Quantidade *</label><input type="number" id="enc-quantidade" min="1" value="1" required></div>
+                            <div class="field"><label for="enc-prioridade">Prioridade</label><select id="enc-prioridade"><option>Normal</option><option>Alta</option><option>Urgente</option></select></div>
+                            <div class="field"><label for="enc-fornecedor">Fornecedor *</label><select id="enc-fornecedor" required><option value="">Selecione um fornecedor</option></select></div>
+                            <div class="field"><label for="enc-data-necessaria">Necessário até</label><input type="date" id="enc-data-necessaria"></div>
+                            <div class="field"><label for="enc-valor-estimado">Valor estimado (R$)</label><input type="number" id="enc-valor-estimado" min="0" step="0.01" placeholder="0,00"></div>
+                            <div class="field"><label for="enc-anexo">Cotação ou anexo por link</label><input type="url" id="enc-anexo" pattern="https://.*" placeholder="https://..."></div>
+                            <div class="field field-span-2"><label for="enc-observacoes">Observações</label><textarea id="enc-observacoes" rows="3" placeholder="Especificações, orçamento ou contexto da compra"></textarea></div>
+                            <div class="purchase-submit-row field-span-2"><button type="submit" class="btn">Criar solicitação</button><p id="mensagemEncomenda" role="status" aria-live="polite"></p></div>
+                        </form>
+                    </div>
+                    <aside class="purchase-orders-panel">
+                        <div class="card-heading-inline"><div><span class="section-kicker">Acompanhamento</span><h2>Pedidos recentes</h2></div><span class="live-pill">Tempo real</span></div>
+                        <div class="operations-toolbar purchase-toolbar">
+                            <input id="order-search" type="search" aria-label="Pesquisar solicitações de compra" placeholder="Buscar produto, fornecedor ou responsável">
+                            <select id="order-status-filter" aria-label="Filtrar solicitações por status"><option value="">Todos os status</option><option>Solicitado</option><option>Aguardando aprovação</option><option>Em cotação</option><option>Aprovado</option><option>Pedido enviado</option><option>Recebendo</option><option>Recebido</option><option>Recusado</option><option>Cancelado</option></select>
+                            <select id="order-priority-filter" aria-label="Filtrar solicitações por prioridade"><option value="">Todas as prioridades</option><option>Normal</option><option>Alta</option><option>Urgente</option></select>
+                            <div class="view-switch" data-view-switch="encomendas" aria-label="Visualização das encomendas">
+                                <button type="button" data-view-module="encomendas" data-view="cards" aria-label="Visualizar em cards" title="Visualizar em cards"><svg viewbox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></button>
+                                <button type="button" data-view-module="encomendas" data-view="list" aria-label="Visualizar em lista" title="Visualizar em lista"><svg viewbox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"></path></svg></button>
+                            </div>
+                            <button type="button" class="secondary-action clear-toolbar" data-clear-toolbar="orders">Limpar</button>
+                            <span id="order-result-count" class="result-count" role="status" aria-live="polite">0 pedidos</span>
+                        </div>
+                        <div id="pedidos-lista" class="purchase-order-list"><div class="empty-state"><strong>Nenhum pedido carregado</strong><span>As solicitações recentes aparecerão aqui.</span></div></div>
+                        <button type="button" id="orders-load-more" class="secondary-action load-more-action" hidden>Carregar mais</button>
+                    </aside>
+                </section>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Controle de Estoque do sistema CheckLog.">
+    <base href="../">
+    <title>Controle de Estoque | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="controle-estoque">
+    <main id="app-content" tabindex="-1">
+        <div id="page-controle-estoque" class="page active">
+                <section class="work-page-header inventory-header">
+                    <span class="section-kicker">Inventário operacional</span>
+                    <h1>Controle de Estoque</h1>
+                    <p>Gerencie produtos, acompanhe indicadores e registre movimentações com rastreabilidade.</p>
+                        <div class="inventory-tabs">
+                            <a href="javascript:void(0)" data-page="controle-estoque" onclick="navigate('controle-estoque')" class="active">Produtos</a>
+                            <a href="javascript:void(0)" data-page="dashboard" onclick="navigate('dashboard')">Dashboard</a>
+                            <a href="javascript:void(0)" data-page="relatorios" onclick="navigate('relatorios')">Relatórios</a>
+                            <a href="javascript:void(0)" data-page="encomendar" onclick="navigate('encomendar')">Encomendar</a>
+                        </div>
+                </section>
+        
+                <section class="inventory-metrics">
+                    <div class="box metric-box">
+                        <div class="box-title">Total de Produtos</div>
+                        <div class="box-value" id="info-total">0</div>
+                    </div>
+                    <div class="box metric-box">
+                        <div class="box-title">Categorias</div>
+                        <div class="box-value" id="info-categorias">0</div>
+                    </div>
+                    <div class="box metric-box warning-box clickable-card" id="card-itens-criticos" role="button" tabindex="0">
+                        <div class="box-title">Estoque Baixo</div>
+                        <div class="box-value" id="info-baixo">0</div>
+                        <small>Ver itens críticos</small>
+                    </div>
+                    <div class="box metric-box">
+                        <div class="box-title" id="financial-view-title">Custo em Estoque</div>
+                        <div class="box-value" id="info-valor-total">R$ 0,00</div>
+                        <button type="button" id="toggle-financial-view" class="metric-link-button">Alternar para faturamento</button>
+                    </div>
+                </section>
+        
+                <section class="inventory-layout">
+                    <section class="card inventory-main">
+                        <div class="panel-heading-row">
+                            <div>
+                                <span class="breadcrumb">Início › Produtos</span>
+                                <h2>Produtos cadastrados</h2>
+                                <div class="update-time" id="update-time"></div>
+                            </div>
+                            <button type="button" class="btn" id="btn-add">Adicionar Produto</button>
+                        </div>
+        
+                        <div class="controls inventory-controls">
+                            <div class="search">
+                                <input id="search" type="search" aria-label="Pesquisar produtos" placeholder="Pesquisar por nome ou categoria">
+                            </div>
+                            <select id="filter-category" class="category-filter" aria-label="Filtrar produtos por categoria">
+                                <option value="">Todas as categorias</option>
+                            </select>
+                            <button type="button" id="btn-imprimir-estoque" class="secondary-action">Imprimir Estoque</button>
+                            <button type="button" id="btn-exportar-estoque-csv" class="secondary-action">Exportar CSV</button>
+                        </div>
+        
+                        <div class="table-wrapper inventory-table">
+                            <table>
+                                <caption class="sr-only">Produtos cadastrados no estoque</caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nome</th>
+                                        <th scope="col">Categoria</th>
+                                        <th scope="col">Quantidade</th>
+                                        <th scope="col">Estoque mínimo</th>
+                                        <th scope="col">Custo / Venda</th>
+                                        <th scope="col">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body"></tbody>
+                            </table>
+                        </div>
+                    </section>
+        
+                    <aside class="inventory-insights">
+                        <div class="insight-card">
+                            <h3 id="stock-category-chart-title">Distribuição por Categoria</h3>
+                            <canvas id="pieChart" width="220" height="220" role="img" aria-labelledby="stock-category-chart-title" aria-describedby="stock-category-chart-summary">Gráfico com a quantidade de itens por categoria do estoque.</canvas>
+                            <p id="stock-category-chart-summary" class="sr-only">A legenda apresenta cada categoria e sua participação no estoque.</p>
+                        </div>
+                        <div class="insight-card compact-insight">
+                            <h3>Boas práticas</h3>
+                            <ul class="check-list">
+                                <li>Atualize quantidades após cada entrada ou baixa.</li>
+                                <li>Use relatórios para rastrear edições e exclusões.</li>
+                                <li>Solicite encomenda antes de zerar itens críticos.</li>
+                            </ul>
+                        </div>
+                    </aside>
+                </section>
+        
+                <div class="modal-backdrop" id="modal" hidden>
+                    <div class="modal inventory-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                        <div class="modal-title-row">
+                            <h3 id="modal-title">Adicionar Produto</h3>
+                            <button type="button" id="product-modal-close" class="theme-close" aria-label="Fechar">×</button>
+                        </div>
+                        <div class="field">
+                            <label for="p-name">Nome</label>
+                            <input id="p-name" placeholder="Nome do produto">
+                        </div>
+                        <div class="field">
+                            <label for="p-category">Categoria</label>
+                            <input id="p-category" list="product-category-options" placeholder="Ex.: Matéria-prima" required>
+                            <datalist id="product-category-options">
+                                <option value="Matéria-prima"></option>
+                                <option value="Componentes"></option>
+                                <option value="Ferramentas"></option>
+                                <option value="EPIs"></option>
+                                <option value="Manutenção"></option>
+                                <option value="Embalagens"></option>
+                                <option value="Produto acabado"></option>
+                                <option value="TI e eletrônicos"></option>
+                                <option value="Outros"></option>
+                            </datalist>
+                        </div>
+                        <div class="field">
+                            <label for="p-qty">Quantidade</label>
+                            <input id="p-qty" type="number" min="0" placeholder="0">
+                        </div>
+                        <div class="field">
+                            <label for="p-min-qty">Estoque mínimo</label>
+                            <input id="p-min-qty" type="number" min="0" placeholder="0">
+                        </div>
+                        <div class="field">
+                            <label for="p-price">Preço de custo (R$)</label>
+                            <input id="p-price" type="number" step="0.01" min="0" placeholder="0,00">
+                        </div>
+                        <div class="field">
+                            <label for="p-sale-price">Preço de venda (R$)</label>
+                            <input id="p-sale-price" type="number" step="0.01" min="0" placeholder="0,00">
+                        </div>
+                        <div class="modal-actions-row">
+                            <button type="button" id="cancel-product" class="secondary-action">Cancelar</button>
+                            <button type="button" class="btn" id="save-product">Salvar Produto</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-backdrop utility-modal" id="stock-movement-modal" hidden>
+                    <div class="modal inventory-modal" role="dialog" aria-modal="true" aria-labelledby="stock-movement-title">
+                        <h3 id="stock-movement-title">Registrar movimentação</h3>
+                        <p id="stock-movement-product" class="muted-note"></p>
+                        <div class="field"><label for="stock-movement-type">Tipo</label><select id="stock-movement-type"><option value="Entrada">Entrada</option><option value="Retirada">Retirada</option></select></div>
+                        <div class="field"><label for="stock-movement-qty">Quantidade</label><input id="stock-movement-qty" type="number" min="1" value="1"></div>
+                        <div class="field"><label for="stock-movement-employee">Destinatário da retirada</label><select id="stock-movement-employee"><option value="">Sem destinatário específico</option></select></div>
+                        <div class="field"><label for="stock-movement-note">Observação</label><textarea id="stock-movement-note" rows="3" placeholder="Obra, setor ou motivo"></textarea></div>
+                        <div class="modal-actions-row"><button type="button" id="cancel-stock-movement" class="secondary-action">Cancelar</button><button type="button" id="save-stock-movement" class="btn">Salvar movimentação</button></div>
+                    </div>
+                </div>
+                <div class="modal-backdrop utility-modal stock-ar-modal" id="stock-ar-modal" hidden>
+                    <div class="modal stock-ar-dialog" role="dialog" aria-modal="true" aria-labelledby="stock-ar-product-name">
+                        <div class="modal-title-row">
+                            <div>
+                                <span class="section-kicker">Prévia em AR</span>
+                                <h3 id="stock-ar-product-name">Produto</h3>
+                            </div>
+                            <button type="button" id="close-stock-ar" class="theme-close" aria-label="Fechar">×</button>
+                        </div>
+                        <div class="stock-ar-stage">
+                            <video id="stock-ar-video" class="stock-ar-video" autoplay muted playsinline aria-hidden="true"></video>
+                            <div id="stock-ar-fallback" class="stock-ar-fallback" role="status" aria-live="polite" hidden></div>
+                            <article class="stock-ar-overlay-card">
+                                <span id="stock-ar-status" class="stock-ar-status">Status</span>
+                                <p id="stock-ar-summary">Selecione um produto para visualizar.</p>
+                                <dl class="stock-ar-facts">
+                                    <div><dt>Quantidade</dt><dd id="stock-ar-quantity">0 un.</dd></div>
+                                    <div><dt>Mínimo</dt><dd id="stock-ar-minimum">0 un.</dd></div>
+                                    <div><dt>Custo</dt><dd id="stock-ar-cost">R$ 0,00</dd></div>
+                                    <div><dt>Venda</dt><dd id="stock-ar-sale">R$ 0,00</dd></div>
+                                    <div><dt>Margem</dt><dd id="stock-ar-margin">R$ 0,00</dd></div>
+                                </dl>
+                                <p id="stock-ar-recommendation" class="muted-note">Saldo confortável para a rotina atual.</p>
+                            </article>
+                        </div>
+                        <div class="modal-actions-row">
+                            <button type="button" id="stock-ar-open-movement" class="secondary-action">Movimentar item</button>
+                            <button type="button" id="stock-ar-close-secondary" class="btn">Concluir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

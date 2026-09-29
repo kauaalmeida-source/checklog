@@ -1,0 +1,3 @@
+produto_id,produto,categoria,quantidade_atual,estoque_minimo,custo_unitario,preco_venda,valor_total_custo,margem_unitaria,situacao_estoque,exportado_em
+PROD-001,Luva nitrilica,EPI,4,5,10,16,40,6,critico,2026-07-05T15:00:00.000Z
+PROD-002,Protetor auricular,EPI,30,10,4,7,120,3,normal,2026-07-05T15:00:00.000Z

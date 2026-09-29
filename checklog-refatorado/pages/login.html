@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Controle de ponto, estoque e compras para a rotina da equipe. do sistema CheckLog.">
+    <base href="../">
+    <title>Controle de ponto, estoque e compras para a rotina da equipe. | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="login">
+    <main id="app-content" tabindex="-1">
+        <div id="page-login" class="page active">
+                <div class="login-shell">
+                    <section class="login-brand-panel">
+                        <div class="login-brand">
+                            <img src="img/logo-CheckLog-removebg-preview.png" alt="CheckLog" width="435" height="162">
+                            <span>Controle operacional integrado</span>
+                        </div>
+                        <div class="login-brand-copy">
+                            <span class="login-kicker">Controle interno</span>
+                            <h1>Controle de ponto, estoque e compras para a rotina da equipe.</h1>
+                            <p>Acesse registros, movimentações e solicitações atualizadas.</p>
+                        </div>
+                        <div class="login-feature-grid">
+                            <div><strong>Tempo real</strong><span>Indicadores e alertas atualizados</span></div>
+                            <div><strong>Rastreável</strong><span>Histórico de ações e responsáveis</span></div>
+                        </div>
+                        <p class="login-brand-foot">CheckLog · Sistema interno</p>
+                    </section>
+        
+                    <section class="login-access-panel">
+                        <form id="loginForm">
+                            <div class="login-form-heading">
+                                <span class="login-kicker">Acesso ao sistema</span>
+                                <h2>Entre na sua conta</h2>
+                                <p>Use seu e-mail corporativo e senha.</p>
+                            </div>
+                            <div class="input-caixa login-field">
+                                <label for="emailInput">E-mail corporativo</label>
+                                <input type="email" id="emailInput" placeholder="nome@empresa.com" autocomplete="email" required>
+                            </div>
+                            <div class="input-caixa login-field">
+                                <label for="passwordInput">Senha</label>
+                                <input type="password" id="passwordInput" placeholder="Digite sua senha" autocomplete="current-password" required>
+                            </div>
+                            <div class="lembra">
+                                <label>
+                                    <input type="checkbox" id="lembrarInput"> Manter conectado
+                                </label>
+                            </div>
+                            <button class="login-botao" type="submit">Entrar no CheckLog</button>
+                            <div id="mensagem" class="login-message" aria-live="polite"></div>
+                            <div class="login-help">
+                                <span>Primeiro acesso ou conta bloqueada?</span>
+                                <strong>Procure o RH ou administrador.</strong>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

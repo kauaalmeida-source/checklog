@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Novo Funcionário do sistema CheckLog.">
+    <base href="../">
+    <title>Novo Funcionário | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="cadastro">
+    <main id="app-content" tabindex="-1">
+        <div id="page-cadastro" class="page active">
+                <div class="employee-register-shell">
+                    <section class="work-page-header compact-register-header">
+                        <span class="section-kicker">Cadastro de equipe</span>
+                        <h1>Novo Funcionário</h1>
+                        <p>Crie o acesso e vincule os dados operacionais do colaborador em uma única etapa.</p>
+                    </section>
+        
+                    <form id="cadastroForm" class="employee-register-form">
+                        <section class="register-panel">
+                            <div class="form-section-title">
+                                <h2>Acesso ao sistema</h2>
+                                <span>Usado para acesso e autenticação no sistema.</span>
+                            </div>
+                            <div class="register-fields two-cols">
+                                <div class="input-caixa">
+                                    <label for="emailInputCad">E-mail de login</label>
+                                    <input type="email" id="emailInputCad" placeholder="email@empresa.com" required>
+                                </div>
+                                <div class="input-caixa">
+                                    <label for="passwordInputCad">Senha inicial</label>
+                                    <input type="password" id="passwordInputCad" placeholder="Defina uma senha" autocomplete="new-password" required>
+                                </div>
+                            </div>
+                        </section>
+        
+                        <section class="register-panel">
+                            <div class="form-section-title">
+                                <h2>Dados do colaborador</h2>
+                                <span>Informações exibidas no ponto e na gestão.</span>
+                            </div>
+                            <div class="register-fields two-cols">
+                                <div class="input-caixa field-span-2">
+                                    <label for="nomeInput">Nome completo</label>
+                                    <input type="text" id="nomeInput" placeholder="Nome completo" required>
+                                </div>
+                                <div class="input-caixa">
+                                    <label for="matriculaInput">Matrícula</label>
+                                    <input type="text" id="matriculaInput" inputmode="numeric" pattern="[0-9]+" placeholder="Ex: 1001" required>
+                                </div>
+                                <div class="input-caixa">
+                                    <label for="cpfInput">CPF para comprovante</label>
+                                    <input type="text" id="cpfInput" inputmode="numeric" maxlength="14" placeholder="000.000.000-00">
+                                </div>
+                                <div class="input-caixa">
+                                    <label for="cargoInput">Cargo</label>
+                                    <input type="text" id="cargoInput" placeholder="Cargo do colaborador" required>
+                                </div>
+                                <div class="input-caixa">
+                                    <label for="setorInput">Setor</label>
+                                    <select id="setorInput" required>
+                                        <option value="" disabled selected>Selecione o setor</option>
+                                        <option value="Administrativo">Administrativo</option>
+                                        <option value="Recursos Humanos">Recursos Humanos</option>
+                                        <option value="TI">TI</option>
+                                        <option value="Operacional">Operacional (Obras)</option>
+                                    </select>
+                                </div>
+                                <div class="input-caixa">
+                                    <label for="turnoInput">Turno</label>
+                                    <select id="turnoInput" required>
+                                        <option value="" disabled selected>Selecione o turno</option>
+                                        <option value="Manhã">Manhã</option>
+                                        <option value="Tarde">Tarde</option>
+                                        <option value="Noturno">Noturno</option>
+                                        <option value="Administrativo">Administrativo</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+        
+                        <div class="register-footer">
+                            <button class="login-botao" type="submit">Cadastrar Funcionário</button>
+                            <button id="retry-welcome-email" class="secondary-action" type="button" hidden>Reenviar e-mail de boas-vindas</button>
+                            <a href="javascript:void(0)" onclick="navigate('pagina-inicial')">Voltar ao início</a>
+                        </div>
+                        <p id="mensagemCad" class="form-message" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

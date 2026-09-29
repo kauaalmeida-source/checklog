@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Relatórios de Estoque do sistema CheckLog.">
+    <base href="../">
+    <title>Relatórios de Estoque | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="relatorios">
+    <main id="app-content" tabindex="-1">
+        <div id="page-relatorios" class="page active">
+                <section class="work-page-header inventory-header">
+                    <span class="section-kicker">Inventário operacional</span>
+                    <h1>Relatórios de Estoque</h1>
+                    <p>Consulte movimentações recentes, edições, exclusões e solicitações registradas.</p>
+                    <div class="inventory-tabs">
+                        <a href="javascript:void(0)" data-page="controle-estoque" onclick="navigate('controle-estoque')">Produtos</a>
+                        <a href="javascript:void(0)" data-page="dashboard" onclick="navigate('dashboard')">Dashboard</a>
+                        <a href="javascript:void(0)" data-page="relatorios" onclick="navigate('relatorios')" class="active">Relatórios</a>
+                        <a href="javascript:void(0)" data-page="encomendar" onclick="navigate('encomendar')">Encomendar</a>
+                    </div>
+                </section>
+                <div class="app">
+                    <aside id="power-bi-export-panel" class="power-bi-export-panel" aria-labelledby="power-bi-export-title">
+                        <div>
+                            <span class="section-kicker">Análise externa</span>
+                            <h2 id="power-bi-export-title">Exportar para Power BI</h2>
+                            <p>Gere um CSV local preparado para análise. Nenhum dado será enviado automaticamente.</p>
+                        </div>
+                        <div class="power-bi-export-controls">
+                            <label>
+                                Conjunto de dados
+                                <select id="power-bi-dataset">
+                                    <option value="ponto">Resumo diário de ponto</option>
+                                    <option value="estoque">Posição atual do estoque</option>
+                                    <option value="movimentacoes">Movimentações de estoque</option>
+                                </select>
+                            </label>
+                            <label>
+                                Período
+                                <select id="power-bi-period">
+                                    <option value="mes_atual">Mês atual</option>
+                                    <option value="90_dias">Últimos 90 dias</option>
+                                    <option value="historico">Todo o histórico</option>
+                                </select>
+                            </label>
+                            <label>
+                                Privacidade
+                                <select id="power-bi-privacy">
+                                    <option value="pseudonimizado">Pseudonimizado</option>
+                                    <option value="identificado">Identificado</option>
+                                </select>
+                            </label>
+                            <button type="button" id="btn-exportar-power-bi" class="btn">Gerar CSV</button>
+                        </div>
+                        <p class="muted-note">Importe o CSV no Power BI Desktop e prefira dados pseudonimizados em apresentações.</p>
+                    </aside>
+                    <section class="card">
+                        <div class="panel-heading-row"><h2 class="subtitle">Movimentações Recentes</h2><button type="button" id="btn-exportar-relatorios-csv" class="secondary-action">Exportar CSV</button></div>
+                        <div class="operations-toolbar">
+                            <input id="report-search" type="search" aria-label="Pesquisar movimentações" placeholder="Buscar produto, destinatário ou operador">
+                            <select id="report-type-filter" aria-label="Filtrar movimentações por tipo"><option value="">Todos os tipos</option><option>Entrada</option><option>Retirada</option><option>Encomenda</option><option>Edição</option><option>Exclusão</option></select>
+                            <select id="report-period-filter" aria-label="Filtrar movimentações por período"><option value="all">Todo o histórico</option><option value="today">Hoje</option><option value="7days">Últimos 7 dias</option><option value="30days">Últimos 30 dias</option></select>
+                            <details class="column-picker">
+                                <summary>Colunas</summary>
+                                <div>
+                                    <label><input type="checkbox" data-column-table="report-table" data-column-index="6" checked> Destinatário</label>
+                                    <label><input type="checkbox" data-column-table="report-table" data-column-index="7" checked> Operador</label>
+                                    <label><input type="checkbox" data-column-table="report-table" data-column-index="8" checked> Observação</label>
+                                </div>
+                            </details>
+                            <button type="button" class="secondary-action clear-toolbar" data-clear-toolbar="reports">Limpar</button>
+                            <span id="report-result-count" class="result-count" role="status" aria-live="polite">0 movimentações</span>
+                        </div>
+                        <div class="table-wrapper report-table-wrapper">
+                            <table class="report-table" id="report-table">
+                                <caption class="sr-only">Movimentações recentes do estoque</caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nome</th><th scope="col">Categoria</th>
+                                        <th scope="col">Tipo</th><th scope="col">Quantidade</th><th scope="col">Saldo</th>
+                                        <th scope="col">Destinatário</th><th scope="col">Operador</th><th scope="col">Observação</th><th scope="col">Data / Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorios-body">
+                                    <tr><td colspan="9" class="table-loading-cell">Carregando movimentações...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" id="reports-load-more" class="secondary-action load-more-action" hidden>Carregar mais</button>
+                    </section>
+                </div>
+            </div>
+        
+        
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

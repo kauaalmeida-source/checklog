@@ -1,0 +1,133 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "cargos": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+        ".write": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')"
+      }
+    },
+    "funcionarios": {
+      ".indexOn": [
+        "uid"
+      ],
+      ".read": "auth != null && ((query.orderByChild == 'uid' && query.equalTo == auth.uid) || root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      "$matricula": {
+        ".read": "auth != null && (data.child('uid').val() == auth.uid || root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+        ".write": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')"
+      }
+    },
+    "registros_ponto": {
+      ".indexOn": [
+        "uid",
+        "matricula",
+        "timestamp"
+      ],
+      ".read": "auth != null && ((query.orderByChild == 'uid' && query.equalTo == auth.uid) || root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      "$registro": {
+        ".validate": "!newData.exists() || data.exists() || newData.child('origem').val() != 'maquina_ponto' || (newData.child('uid').val() == auth.uid && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('matricula').val() == newData.child('matricula').val() && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('movimento').val() == newData.child('momento').val() && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('pontoKey').val() == $registro && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('token').val() == newData.child('controleToken').val() && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('expiraEm').val() >= now)",
+        ".read": "auth != null && (data.child('uid').val() == auth.uid || root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+        ".write": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI' || (!data.exists() && newData.hasChildren(['uid', 'matricula', 'nome', 'setor', 'cargo', 'momento', 'turno', 'timestamp', 'timestampMs', 'origem', 'dataOperacional', 'controleToken']) && newData.child('uid').val() == auth.uid && root.child('funcionarios').child(newData.child('matricula').val()).child('uid').val() == auth.uid && newData.child('nome').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('nome').val() && newData.child('setor').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('setor').val() && newData.child('cargo').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('cargo').val() && newData.child('turno').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('turno').val() && newData.child('origem').val() == 'maquina_ponto' && newData.child('timestamp').isString() && newData.child('dataOperacional').isString() && newData.child('dataOperacional').val().matches(/^\\d{4}-\\d{2}-\\d{2}$/) && newData.child('controleToken').isString() && (newData.child('momento').val() == 'Entrada' || newData.child('momento').val() == 'Saída para Almoço' || newData.child('momento').val() == 'Volta do Almoço' || newData.child('momento').val() == 'Saída') && newData.child('timestampMs').isNumber() && newData.child('timestampMs').val() >= now - 300000 && newData.child('timestampMs').val() <= now + 60000 && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('uid').val() == auth.uid && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('matricula').val() == newData.child('matricula').val() && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('movimento').val() == newData.child('momento').val() && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('pontoKey').val() == $registro && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('token').val() == newData.child('controleToken').val() && root.child('controles_ponto').child(auth.uid).child(newData.child('dataOperacional').val()).child('expiraEm').val() >= now))"
+      }
+    },
+    "controles_ponto": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        "$dataOperacional": {
+          ".write": "auth != null && auth.uid == $uid && ((!data.exists() && newData.exists()) || (data.exists() && data.child('expiraEm').val() <= now && newData.exists()) || (data.exists() && !newData.exists()) || (data.exists() && newData.exists() && data.child('token').val() == newData.child('token').val()))",
+          ".validate": "!newData.exists() || (newData.hasChildren(['uid', 'matricula', 'dataOperacional', 'movimento', 'pontoKey', 'token', 'adquiridoEm', 'expiraEm']) && newData.child('uid').isString() && newData.child('uid').val() == auth.uid && newData.child('uid').val() == $uid && newData.child('matricula').isString() && newData.child('matricula').val().length > 0 && newData.child('matricula').val().length <= 80 && newData.child('dataOperacional').isString() && newData.child('dataOperacional').val() == $dataOperacional && newData.child('dataOperacional').val().matches(/^\\d{4}-\\d{2}-\\d{2}$/) && newData.child('movimento').isString() && (newData.child('movimento').val() == 'Entrada' || newData.child('movimento').val() == 'Saída para Almoço' || newData.child('movimento').val() == 'Volta do Almoço' || newData.child('movimento').val() == 'Saída') && newData.child('pontoKey').isString() && newData.child('pontoKey').val().length > 0 && newData.child('pontoKey').val().length <= 300 && newData.child('token').isString() && newData.child('token').val().length > 0 && newData.child('token').val().length <= 160 && newData.child('adquiridoEm').isNumber() && newData.child('adquiridoEm').val() >= now - 300000 && newData.child('adquiridoEm').val() <= now + 60000 && newData.child('expiraEm').isNumber() && newData.child('expiraEm').val() > newData.child('adquiridoEm').val() && newData.child('expiraEm').val() <= newData.child('adquiridoEm').val() + 60000 && newData.child('expiraEm').val() <= now + 120000)",
+          "uid": {
+            ".validate": "newData.isString()"
+          },
+          "matricula": {
+            ".validate": "newData.isString()"
+          },
+          "dataOperacional": {
+            ".validate": "newData.isString()"
+          },
+          "movimento": {
+            ".validate": "newData.isString()"
+          },
+          "pontoKey": {
+            ".validate": "newData.isString()"
+          },
+          "token": {
+            ".validate": "newData.isString()"
+          },
+          "adquiridoEm": {
+            ".validate": "newData.isNumber()"
+          },
+          "expiraEm": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "historico_ponto": {
+      ".indexOn": [
+        "registroKey",
+        "responsavelUid",
+        "timestamp"
+      ],
+      ".read": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      "$evento": {
+        ".write": "auth != null && ((!data.exists() && newData.exists()) || (data.exists() && newData.val() == data.val())) && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+        ".validate": "newData.hasChildren(['acao', 'registroKey', 'responsavelUid', 'responsavelEmail', 'timestamp']) && newData.child('acao').isString() && newData.child('acao').val().length > 0 && newData.child('registroKey').isString() && newData.child('responsavelUid').isString() && newData.child('responsavelEmail').isString() && newData.child('timestamp').isString() && ((data.exists() && newData.val() == data.val()) || (newData.child('responsavelUid').val() == auth.uid && newData.child('responsavelEmail').val() == auth.token.email))"
+      }
+    },
+    "estoque": {
+      ".read": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      ".write": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      "$produto": {
+        ".validate": "!newData.exists() || (newData.hasChildren(['name', 'category', 'qty', 'minQty', 'price', 'salePrice']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 160 && newData.child('category').isString() && newData.child('category').val().length > 0 && newData.child('category').val().length <= 80 && newData.child('qty').isNumber() && newData.child('qty').val() >= 0 && newData.child('qty').val() % 1 == 0 && newData.child('minQty').isNumber() && newData.child('minQty').val() >= 0 && newData.child('minQty').val() % 1 == 0 && newData.child('price').isNumber() && newData.child('price').val() >= 0 && newData.child('salePrice').isNumber() && newData.child('salePrice').val() >= 0)"
+      }
+    },
+    "movimentacoes_estoque": {
+      ".indexOn": [
+        "operadorUid",
+        "destinatarioUid",
+        "timestamp"
+      ],
+      ".read": "auth != null && ((query.orderByChild == 'destinatarioUid' && query.equalTo == auth.uid) || root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      "$movimento": {
+        ".write": "auth != null && ((!data.exists() && newData.exists()) || (data.exists() && newData.val() == data.val())) && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+        ".validate": "!newData.exists() || (newData.hasChildren(['tipo', 'name', 'qty', 'timestamp', 'usuario', 'operadorUid']) && newData.child('tipo').isString() && newData.child('name').isString() && newData.child('qty').isNumber() && newData.child('qty').val() % 1 == 0 && newData.child('operadorUid').isString() && newData.child('usuario').isString() && ((data.exists() && newData.val() == data.val()) || (newData.child('operadorUid').val() == auth.uid && newData.child('usuario').val() == auth.token.email) || (newData.child('produtoKey').isString() && root.child('estoque').child(newData.child('produtoKey').val()).child('auditPending').child('registro').val() == newData.val())))"
+      }
+    },
+    "avisos": {
+      ".read": "auth != null && root.child('cargos').child(auth.uid).exists()",
+      ".write": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')"
+    },
+    "historico_estoque": {
+      ".read": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      "$movimento": {
+        ".write": "auth != null && ((!data.exists() && newData.exists()) || (data.exists() && newData.val() == data.val())) && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+        ".validate": "!newData.exists() || (newData.hasChildren(['tipo', 'name', 'qty', 'timestamp', 'usuario', 'operadorUid']) && newData.child('tipo').isString() && newData.child('name').isString() && newData.child('qty').isNumber() && newData.child('qty').val() % 1 == 0 && newData.child('operadorUid').isString() && newData.child('usuario').isString() && ((data.exists() && newData.val() == data.val()) || (newData.child('operadorUid').val() == auth.uid && newData.child('usuario').val() == auth.token.email) || (newData.child('produtoKey').isString() && root.child('estoque').child(newData.child('produtoKey').val()).child('auditPending').child('registro').val() == newData.val())))"
+      }
+    },
+    "encomendas": {
+      ".read": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      ".write": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')"
+    },
+    "fornecedores": {
+      ".read": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      ".write": "auth != null && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')"
+    },
+    "justificativas": {
+      ".indexOn": [
+        "uid",
+        "status",
+        "criadoEm"
+      ],
+      ".read": "auth != null && ((query.orderByChild == 'uid' && query.equalTo == auth.uid) || root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')",
+      "$solicitacao": {
+        ".write": "auth != null && ((!data.exists() && newData.exists() && newData.child('status').val() == 'Pendente' && newData.child('uid').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('uid').val() && newData.child('nome').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('nome').val() && newData.child('email').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('email').val() && newData.child('setor').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('setor').val() && newData.child('cargo').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('cargo').val() && newData.child('turno').val() == root.child('funcionarios').child(newData.child('matricula').val()).child('turno').val() && (newData.child('uid').val() == auth.uid || root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI') && (!newData.child('registroOrigemKey').exists() || newData.child('registroOrigemKey').val() == '' || root.child('registros_ponto').child(newData.child('registroOrigemKey').val()).child('uid').val() == newData.child('uid').val())) || (data.exists() && (root.child('cargos').child(auth.uid).child('setor').val() == 'Administrativo' || root.child('cargos').child(auth.uid).child('setor').val() == 'Recursos Humanos' || root.child('cargos').child(auth.uid).child('setor').val() == 'TI')))",
+        ".validate": "!newData.exists() || (newData.hasChildren(['uid', 'email', 'nome', 'matricula', 'setor', 'cargo', 'turno', 'data', 'movimento', 'horario', 'motivo', 'status', 'criadoEm']) && newData.child('uid').isString() && newData.child('email').isString() && newData.child('nome').isString() && newData.child('matricula').isString() && newData.child('setor').isString() && newData.child('cargo').isString() && newData.child('turno').isString() && newData.child('data').isString() && newData.child('data').val().matches(/^\\d{4}-\\d{2}-\\d{2}$/) && newData.child('horario').isString() && newData.child('horario').val().matches(/^([01]\\d|2[0-3]):[0-5]\\d$/) && newData.child('criadoEm').isString() && newData.child('motivo').isString() && newData.child('motivo').val().length > 0 && newData.child('motivo').val().length <= 1000 && (newData.child('movimento').val() == 'Entrada' || newData.child('movimento').val() == 'Saída para Almoço' || newData.child('movimento').val() == 'Volta do Almoço' || newData.child('movimento').val() == 'Saída') && (newData.child('status').val() == 'Pendente' || newData.child('status').val() == 'Processando' || newData.child('status').val() == 'Aprovado' || newData.child('status').val() == 'Recusado') && (!newData.child('anexo').exists() || (newData.child('anexo').isString() && newData.child('anexo').val().length <= 2048 && newData.child('anexo').val().matches(/^https:\\/\\/.+/))) && (!newData.child('registroOrigemKey').exists() || newData.child('registroOrigemKey').isString()))"
+      }
+    }
+  }
+}

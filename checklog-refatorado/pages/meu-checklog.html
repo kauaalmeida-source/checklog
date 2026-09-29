@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Meu CheckLog do sistema CheckLog.">
+    <base href="../">
+    <title>Meu CheckLog | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="meu-checklog">
+    <main id="app-content" tabindex="-1">
+        <div id="page-meu-checklog" class="page active">
+                <section class="work-page-header">
+                    <span class="section-kicker">Autoatendimento</span>
+                    <h1>Meu CheckLog</h1>
+                    <p>Consulte sua jornada, saldo de horas, movimentações vinculadas e solicitações de ajuste.</p>
+                </section>
+        
+                <section class="personal-metrics">
+                    <article><span>Horas no mês</span><strong id="my-hours-month">0h</strong><small>Tempo registrado</small></article>
+                    <article><span>Banco de horas</span><strong id="my-hours-balance">0h</strong><small>Base: 9h seg-qui e 8h sex</small></article>
+                    <article><span>Dias registrados</span><strong id="my-days-count">0</strong><small>No mês atual</small></article>
+                    <article><span>Solicitações pendentes</span><strong id="my-pending-requests">0</strong><small>Aguardando análise</small></article>
+                </section>
+        
+                <section class="personal-layout">
+                    <div class="data-panel personal-records-panel">
+                        <div class="panel-heading-row">
+                            <div><span class="section-kicker">Espelho pessoal</span><h2>Meus registros do mês</h2></div>
+                            <div class="panel-actions">
+                                <select id="my-point-period" class="period-filter" aria-label="Período dos meus registros">
+                                    <option value="mes-atual">Mês atual</option>
+                                    <option value="mes-anterior">Mês anterior</option>
+                                    <option value="todos">Todos</option>
+                                </select>
+                                <button type="button" id="btn-export-my-points" class="secondary-action">Exportar CSV</button>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <caption class="sr-only">Registros de ponto do colaborador</caption>
+                                <thead><tr><th scope="col">Data</th><th scope="col">Movimento</th><th scope="col">Turno</th><th scope="col">Horário</th><th scope="col">Ação</th></tr></thead>
+                                <tbody id="my-points-body"><tr><td colspan="5">Carregando registros...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <aside class="personal-side">
+                        <section class="ops-card">
+                            <span class="section-kicker">Novo pedido</span>
+                            <h2>Solicitar ajuste de ponto</h2>
+                            <form id="justification-form" class="compact-form">
+                                <input id="just-source-key" type="hidden">
+                                <div id="just-source-context" class="linked-record-context" hidden>
+                                    <span>Este pedido corrigirá o registro selecionado.</span>
+                                    <button id="clear-just-source" type="button" class="table-inline-action">Solicitar movimento ausente</button>
+                                </div>
+                                <div class="field"><label for="just-date">Data *</label><input id="just-date" type="date" required></div>
+                                <div class="field"><label for="just-movement">Movimento *</label><select id="just-movement"><option>Entrada</option><option>Saída para Almoço</option><option>Volta do Almoço</option><option>Saída</option></select></div>
+                                <div class="field"><label for="just-time">Horário correto *</label><input id="just-time" type="time" required></div>
+                                <div class="field"><label for="just-reason">Motivo *</label><textarea id="just-reason" rows="3" required placeholder="Explique o ajuste solicitado"></textarea></div>
+                                <div class="field"><label for="just-attachment">Comprovante por link</label><input id="just-attachment" type="url" pattern="https://.*" placeholder="https://..."></div>
+                                <button class="btn" type="submit">Enviar solicitação</button>
+                                <p id="justification-message" class="form-message" role="status" aria-live="polite"></p>
+                            </form>
+                        </section>
+                        <section class="ops-card">
+                            <span class="section-kicker">Patrimônio e materiais</span>
+                            <h2>Minhas movimentações</h2>
+                            <input id="my-movement-search" class="compact-search" type="search" aria-label="Buscar minhas movimentações de estoque" placeholder="Buscar material ou movimentação">
+                            <div id="my-stock-movements" class="personal-movement-list"><p class="muted-note">Nenhuma movimentação vinculada.</p></div>
+                        </section>
+                    </aside>
+                </section>
+                <section class="data-panel personal-requests-panel">
+                    <div class="panel-heading-row"><div><span class="section-kicker">Acompanhamento</span><h2>Minhas justificativas</h2></div></div>
+                    <div class="operations-toolbar">
+                        <input id="my-request-search" type="search" aria-label="Buscar minhas justificativas" placeholder="Buscar movimento ou motivo">
+                        <select id="my-request-status" aria-label="Filtrar minhas justificativas por status"><option value="">Todos os status</option><option>Pendente</option><option>Aprovado</option><option>Recusado</option></select>
+                        <select id="my-request-sort" aria-label="Ordenar minhas justificativas"><option value="recent">Mais recentes</option><option value="oldest">Mais antigas</option></select>
+                        <button type="button" class="secondary-action clear-toolbar" data-clear-toolbar="my-requests">Limpar</button>
+                        <div class="view-switch" data-view-switch="my-justifications" aria-label="Visualização das minhas justificativas">
+                            <button type="button" data-view-module="my-justifications" data-view="cards" aria-label="Visualizar em cards" title="Visualizar em cards"><svg viewbox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></button>
+                            <button type="button" data-view-module="my-justifications" data-view="list" aria-label="Visualizar em lista" title="Visualizar em lista"><svg viewbox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"></path></svg></button>
+                        </div>
+                        <span id="my-request-result-count" class="result-count" role="status" aria-live="polite">0 solicitações</span>
+                    </div>
+                    <div id="my-justifications" class="request-grid"><div class="empty-state"><strong>Nenhuma solicitação</strong><span>Seus pedidos de ajuste aparecerão aqui.</span></div></div>
+                </section>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

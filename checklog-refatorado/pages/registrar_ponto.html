@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Máquina de Ponto do sistema CheckLog.">
+    <base href="../">
+    <title>Máquina de Ponto | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="registrar_ponto">
+    <main id="app-content" tabindex="-1">
+        <div id="page-registrar_ponto" class="page active">
+                <section class="work-page-header">
+                    <span class="section-kicker">Registro de jornada</span>
+                    <h1>Máquina de Ponto</h1>
+                    <p>Busque a matrícula, confirme os dados do colaborador e registre o movimento correto do turno.</p>
+                </section>
+        
+                <section class="ponto-workspace">
+                    <form id="formCadastro" class="work-form ponto-form">
+                        <div class="form-section-title">
+                            <h2>Dados do colaborador</h2>
+                            <span>Campos bloqueados são preenchidos pela matrícula.</span>
+                        </div>
+                        <div class="campos form-grid">
+                            <div class="field-span-2">
+                                <label for="matricula">Matrícula</label>
+                                <div class="input-group">
+                                    <input type="text" id="matricula" inputmode="numeric" pattern="[0-9]+" placeholder="Ex: 1001" required>
+                                    <button type="button" class="btn-buscar" onclick="buscarFuncionario()">Buscar</button>
+                                </div>
+                            </div>
+        
+                            <div class="field-span-2">
+                                <label for="nome">Nome Completo</label>
+                                <input type="text" id="nome" readonly>
+                            </div>
+        
+                            <div>
+                                <label for="setor">Setor</label>
+                                <input type="text" id="setor" readonly>
+                            </div>
+        
+                            <div>
+                                <label for="cargo">Cargo</label>
+                                <input type="text" id="cargo" readonly>
+                            </div>
+        
+                            <div>
+                                <label for="Iplanos">Turno</label>
+                                <select id="Iplanos">
+                                    <option value="Manhã">Manhã</option>
+                                    <option value="Tarde">Tarde</option>
+                                    <option value="Noturno">Noturno</option>
+                                    <option value="Administrativo">Administrativo</option>
+                                </select>
+                            </div>
+        
+                            <div>
+                                <label for="Imomento">Movimento</label>
+                                <select id="Imomento">
+                                    <option value="Entrada">Entrada</option>
+                                    <option value="Saída para Almoço">Saída para Almoço</option>
+                                    <option value="Volta do Almoço">Volta do Almoço</option>
+                                    <option value="Saída">Saída</option>
+                                </select>
+                            </div>
+        
+                            <div class="field-span-2">
+                                <label for="senha">Senha</label>
+                                <input type="password" id="senha" autocomplete="current-password" required placeholder="Senha do colaborador">
+                            </div>
+                        </div>
+        
+                        <div class="form-actions-row">
+                            <button type="submit" class="botao">Confirmar Registro</button>
+                        </div>
+                        <p id="mensagemPonto" class="form-message" role="status" aria-live="polite"></p>
+                        <button type="button" id="btn-comprovante-ponto" class="secondary-action" hidden>Baixar Comprovante</button>
+                    </form>
+        
+                    <aside class="work-guidance">
+                        <h2>Conferência antes de registrar</h2>
+                        <ul class="check-list">
+                            <li>Verifique se nome, setor e cargo foram carregados.</li>
+                            <li>Selecione o movimento conforme o momento real do turno.</li>
+                            <li>Em caso de marcação errada, acione o responsável pelo painel de gestão.</li>
+                        </ul>
+                        <div class="guidance-box">
+                            <strong>Regra prática</strong>
+                            <span>Não registre duas entradas seguidas. Use saída para almoço, volta do almoço e saída final na ordem correta.</span>
+                        </div>
+                    </aside>
+                </section>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

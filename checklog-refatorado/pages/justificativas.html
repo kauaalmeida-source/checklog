@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Central de Justificativas do sistema CheckLog.">
+    <base href="../">
+    <title>Central de Justificativas | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="justificativas">
+    <main id="app-content" tabindex="-1">
+        <div id="page-justificativas" class="page active">
+                <section class="work-page-header management-header">
+                    <span class="section-kicker">Gestão de jornada</span>
+                    <h1>Central de Justificativas</h1>
+                    <p>Analise solicitações de ajuste, aprove correções e preserve o histórico da decisão.</p>
+                </section>
+                <section class="request-summary-grid">
+                    <article><span>Pendentes</span><strong id="request-pending-count">0</strong></article>
+                    <article><span>Aprovadas</span><strong id="request-approved-count">0</strong></article>
+                    <article><span>Recusadas</span><strong id="request-rejected-count">0</strong></article>
+                </section>
+                <section class="data-panel request-admin-panel">
+                    <div class="panel-heading-row">
+                        <div><span class="section-kicker">Solicitações</span><h2>Pedidos de ajuste de ponto</h2></div>
+                    </div>
+                    <div class="operations-toolbar">
+                        <input id="request-search" type="search" aria-label="Buscar justificativas de funcionários" placeholder="Buscar funcionário, matrícula ou motivo">
+                        <select id="request-status-filter" aria-label="Filtrar justificativas por status"><option value="">Todos os status</option><option>Pendente</option><option>Aprovado</option><option>Recusado</option></select>
+                        <select id="request-movement-filter" aria-label="Filtrar justificativas por movimento"><option value="">Todos os movimentos</option><option>Entrada</option><option>Saída para Almoço</option><option>Volta do Almoço</option><option>Saída</option></select>
+                        <select id="request-sort" aria-label="Ordenar justificativas"><option value="recent">Mais recentes</option><option value="oldest">Mais antigas</option><option value="name">Funcionário A-Z</option></select>
+                        <button type="button" class="secondary-action clear-toolbar" data-clear-toolbar="admin-requests">Limpar</button>
+                        <div class="view-switch" data-view-switch="justificativas" aria-label="Visualização das justificativas">
+                            <button type="button" data-view-module="justificativas" data-view="cards" aria-label="Visualizar em cards" title="Visualizar em cards"><svg viewbox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></button>
+                            <button type="button" data-view-module="justificativas" data-view="list" aria-label="Visualizar em lista" title="Visualizar em lista"><svg viewbox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"></path></svg></button>
+                        </div>
+                        <span id="request-result-count" class="result-count" role="status" aria-live="polite">0 solicitações</span>
+                    </div>
+                    <div id="admin-justifications" class="request-grid"><div class="empty-state"><strong>Nenhuma solicitação</strong><span>Os pedidos enviados pelos colaboradores aparecerão aqui.</span></div></div>
+                </section>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>

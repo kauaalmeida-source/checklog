@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tela Acompanhe a operação diária do CheckLog. do sistema CheckLog.">
+    <base href="../">
+    <title>Acompanhe a operação diária do CheckLog. | CheckLog</title>
+    <link rel="icon" href="img/checklog-logo-removebg-preview.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="css/style.css?v=1.7.0">
+    <script>
+        (function () {
+            var saved = localStorage.getItem('cl-theme') || 'system';
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme-mode', saved);
+        })();
+    </script>
+</head>
+<body class="standalone-module" data-standalone-page="pagina-inicial">
+    <main id="app-content" tabindex="-1">
+        <div id="page-pagina-inicial" class="page active">
+                <section class="ops-hero">
+                    <div>
+                        <span class="section-kicker">Centro operacional</span>
+                        <h1 id="home-profile-title">Acompanhe a operação diária do CheckLog.</h1>
+                        <p id="home-profile-description">Consulte jornada, solicitações, equipe e materiais críticos antes de iniciar as atividades do dia.</p>
+                    </div>
+                    <div class="ops-hero-aside">
+                        <span>Próxima checagem recomendada</span>
+                        <strong id="home-profile-next-title">Fechamento diário</strong>
+                        <small id="home-profile-next-text">Validar pendências de ponto e itens com estoque baixo antes do encerramento do turno.</small>
+                    </div>
+                </section>
+        
+                <section class="ops-grid home-live-grid">
+                    <article class="ops-card turno-status-card" id="turno-status-card">
+                        <span class="section-kicker">Meu turno</span>
+                        <h2 id="turno-status-title">Carregando status</h2>
+                        <p id="turno-status-text">Assim que seus registros forem carregados, o sistema mostra sua situação do dia.</p>
+                        <button type="button" id="turno-status-action" onclick="navigate('registrar_ponto')">Ir para o ponto</button>
+                    </article>
+        
+                    <article class="ops-card notices-card">
+                        <div class="card-heading-inline">
+                            <div>
+                                <span class="section-kicker">Comunicados</span>
+                                <h2>Mural da empresa</h2>
+                            </div>
+                            <div class="notice-actions"><button type="button" id="btn-novo-aviso" class="secondary-action" hidden>Novo aviso</button></div>
+                        </div>
+                        <div id="avisos-lista" class="notice-list">
+                            <p class="muted-note">Nenhum aviso carregado ainda.</p>
+                        </div>
+                    </article>
+                </section>
+        
+                <section class="home-overview" data-admin-only="true">
+                    <div class="section-heading-row">
+                        <div>
+                            <span class="section-kicker">Visão operacional</span>
+                            <h2>O que precisa de atenção</h2>
+                        </div>
+                    </div>
+                    <div class="home-kpi-grid">
+                        <button type="button" class="home-kpi-card danger-tone" onclick="navigate('controle-estoque')">
+                            <span>Itens críticos</span>
+                            <strong id="home-critical-count">0</strong>
+                            <small>Estoque abaixo do limite</small>
+                        </button>
+                        <button type="button" class="home-kpi-card" onclick="navigate('fornecedores')">
+                            <span>Fornecedores ativos</span>
+                            <strong id="home-supplier-count">0</strong>
+                            <small>Parceiros disponíveis</small>
+                        </button>
+                        <button type="button" class="home-kpi-card warning-tone" onclick="navigate('encomendar')">
+                            <span>Compras em aberto</span>
+                            <strong id="home-order-count">0</strong>
+                            <small>Aguardando recebimento</small>
+                        </button>
+                        <button type="button" class="home-kpi-card" onclick="navigate('relatorios')">
+                            <span>Movimentos hoje</span>
+                            <strong id="home-activity-count">0</strong>
+                            <small>Alterações no estoque</small>
+                        </button>
+                    </div>
+                </section>
+        
+                <section class="home-alert-center">
+                    <div class="section-heading-row">
+                        <div>
+                            <span class="section-kicker">Alertas do sistema</span>
+                            <h2>Central de atenção</h2>
+                        </div>
+                    </div>
+                    <div id="home-alert-list" class="alert-list">
+                        <div class="empty-state"><strong>Nenhum alerta carregado</strong><span>O sistema exibirá prazos, pendências e itens críticos aqui.</span></div>
+                    </div>
+                </section>
+        
+                <section class="ops-grid">
+                    <article class="ops-card primary-action">
+                        <span class="section-kicker">Ações rápidas</span>
+                        <h2>Fluxos principais</h2>
+                        <div class="quick-actions">
+                            <button type="button" onclick="navigate('registrar_ponto')"><strong>Registrar ponto</strong><span>Entrada, intervalo e saída</span></button>
+                            <button type="button" onclick="navigate('meu-checklog')"><strong>Meu CheckLog</strong><span>Espelho, banco de horas e ajustes</span></button>
+                            <button type="button" data-admin-only="true" onclick="navigate('gerenciamento-ponto')"><strong>Painel de gestão</strong><span>Acompanhar jornada da equipe</span></button>
+                            <button type="button" data-admin-only="true" onclick="navigate('controle-estoque')"><strong>Controle de estoque</strong><span>Produtos e itens críticos</span></button>
+                            <button type="button" data-admin-only="true" onclick="navigate('fornecedores')"><strong>Fornecedores</strong><span>Parceiros e contatos</span></button>
+                        </div>
+                    </article>
+        
+                    <article class="ops-card" id="home-routine-card">
+                        <h2>Rotina diária</h2>
+                        <ul class="check-list" id="home-routine-list">
+                            <li>Conferir entradas no início do turno.</li>
+                            <li>Validar saídas para almoço e retornos pendentes.</li>
+                            <li>Revisar itens abaixo do estoque mínimo.</li>
+                            <li>Registrar encomendas antes do fechamento.</li>
+                        </ul>
+                    </article>
+        
+                    <article class="ops-card" id="home-policy-card">
+                        <h2>Política operacional</h2>
+                        <ul class="check-list">
+                            <li>Registro de ponto deve ser feito pelo próprio colaborador.</li>
+                            <li>Ajustes manuais devem ser documentados pelo responsável.</li>
+                            <li>EPIs e normas de segurança são obrigatórios em área operacional.</li>
+                            <li>Movimentações de estoque devem preservar rastreabilidade.</li>
+                        </ul>
+                    </article>
+                </section>
+        
+                <section class="ops-grid two-columns">
+                    <article class="ops-card" id="home-responsibilities-card">
+                        <h2>Jornada padrão</h2>
+                        <div class="table-wrapper">
+                            <table class="tabela-horarios compact-table">
+                                <caption class="sr-only">Horários padrão de trabalho por setor</caption>
+                                <thead>
+                                    <tr><th scope="col">Setor</th><th scope="col">Seg – Qui</th><th scope="col">Sexta</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><strong>Escritório / ADM</strong></td><td>08:00 – 18:00</td><td>08:00 – 17:00</td></tr>
+                                    <tr><td><strong>Obras / Campo</strong></td><td>07:00 – 17:00</td><td>07:00 – 16:00</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="muted-note">Intervalo padrão: 1 hora de almoço em todos os turnos.</p>
+                    </article>
+        
+                    <article class="ops-card" id="home-module-responsibilities-card">
+                        <h2>Responsabilidades por módulo</h2>
+                        <div class="responsibility-list">
+                            <div><strong>RH / Gestão</strong><span>Cadastro, auditoria de ponto e correções autorizadas.</span></div>
+                            <div><strong>Operação</strong><span>Registro de jornada e comunicação de divergências.</span></div>
+                            <div><strong>Estoque</strong><span>Cadastro, edição, baixa e solicitação de reposição.</span></div>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        
+            
+    </main>
+    <script src="js/email-service.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.7.0"></script>
+</body>
+</html>
